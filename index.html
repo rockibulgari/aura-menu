@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AURA — меню и доставка, Назрань</title>
+  <meta name="description" content="Меню кафе AURA в Назрани. Соберите заказ и отправьте его в WhatsApp. Доставка по всей Ингушетии.">
+  <meta name="theme-color" content="#FAF6EF">
+  <link rel="icon" href="img/logo.webp" type="image/webp">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top__row">
+      <img class="top__logo" src="img/logo.webp" alt="Логотип AURA" width="56" height="56">
+      <div class="top__text">
+        <h1 class="top__name">AURA</h1>
+        <p class="top__sub">cafe lounge · Назрань</p>
+      </div>
+      <a class="btn-icon" id="callTop" href="tel:+79137060606" aria-label="Позвонить в кафе">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+      </a>
+    </div>
+    <div class="wrap info">
+      <p class="status" id="status"><span class="status__dot"></span><span id="statusText">…</span></p>
+      <a class="info__addr" id="mapLink" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>г. Назрань, ул. Тангиева, 45</span>
+      </a>
+      <a class="info__phone" href="tel:+79137060606">+7 913 706-06-06</a>
+      <p class="info__note">Доставка по всей Ингушетии · заказы с 11:00 до 23:30</p>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Разделы меню">
+    <div class="wrap tabs__row" id="tabs"></div>
+  </nav>
+
+  <main class="wrap" id="menu"></main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p class="foot__name">AURA · cafe lounge</p>
+      <p>г. Назрань, ул. Тангиева, 45</p>
+      <p>Ежедневно 11:00 — 00:00, заказы до 23:30</p>
+      <p><a href="tel:+79137060606">+7 913 706-06-06</a> · <a href="https://instagram.com/aura_kafe_" target="_blank" rel="noopener">Instagram</a></p>
+      <p class="foot__muted">Если у вас аллергия на что-то, напишите об этом в комментарии к заказу.</p>
+    </div>
+  </footer>
+
+  <!-- Кнопка корзины внизу экрана -->
+  <button class="cartbar" id="cartbar" type="button" hidden>
+    <span class="cartbar__count" id="cartCount">0</span>
+    <span class="cartbar__label">Корзина</span>
+    <span class="cartbar__sum" id="cartSum">0 ₽</span>
+  </button>
+
+  <!-- Выезжающая панель: корзина / оформление / готово -->
+  <div class="overlay" id="overlay" hidden></div>
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+    <div class="sheet__head">
+      <button class="btn-icon btn-icon--ghost" id="sheetBack" type="button" aria-label="Назад" hidden>
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg>
+      </button>
+      <h2 class="sheet__title" id="sheetTitle">Корзина</h2>
+      <button class="btn-icon btn-icon--ghost" id="sheetClose" type="button" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M18.3 5.7 16.9 4.3 12 9.2 7.1 4.3 5.7 5.7 10.6 12l-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9z"/></svg>
+      </button>
+    </div>
+
+    <!-- 1. Корзина -->
+    <div class="sheet__body" id="viewCart">
+      <ul class="clist" id="cartList"></ul>
+      <div class="empty" id="cartEmpty" hidden>
+        <p>В корзине пока пусто</p>
+        <button class="btn btn--light" type="button" data-close>Вернуться в меню</button>
+      </div>
+      <div class="sheet__foot" id="cartFoot">
+        <div class="total"><span>Сумма</span><b id="cartTotal">0 ₽</b></div>
+        <p class="hint">Без учёта доставки</p>
+        <p class="closed-note" id="closedNote" hidden>Сейчас заказы не принимаем. Корзина сохранится — оформите заказ после 11:00.</p>
+        <button class="btn" id="toCheckout" type="button">Оформить заказ</button>
+      </div>
+    </div>
+
+    <!-- 2. Оформление -->
+    <form class="sheet__body" id="viewCheckout" novalidate hidden>
+      <fieldset class="field">
+        <legend class="label">Как получить заказ</legend>
+        <div class="seg">
+          <label><input type="radio" name="method" value="delivery" checked><span>Доставка</span></label>
+          <label><input type="radio" name="method" value="pickup"><span>Самовывоз</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="label" for="fName">Ваше имя</label>
+        <input class="input" id="fName" name="name" autocomplete="given-name" placeholder="Например, Магомед">
+        <p class="err" data-err="name"></p>
+      </div>
+
+      <div class="field">
+        <label class="label" for="fPhone">Телефон</label>
+        <input class="input" id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+        <p class="err" data-err="phone"></p>
+      </div>
+
+      <div id="deliveryBox">
+        <div class="field">
+          <label class="label" for="fTown">Населённый пункт</label>
+          <input class="input" id="fTown" name="town" list="towns" autocomplete="address-level2" value="Назрань">
+          <datalist id="towns"></datalist>
+          <p class="err" data-err="town"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="fStreet">Улица и дом</label>
+          <input class="input" id="fStreet" name="street" autocomplete="street-address" placeholder="Например, ул. Московская, 12">
+          <p class="err" data-err="street"></p>
+        </div>
+        <div class="field">
+          <label class="label" for="fFlat">Квартира, подъезд, этаж <span class="opt">(необязательно)</span></label>
+          <input class="input" id="fFlat" name="flat" placeholder="кв. 5, подъезд 2, этаж 3">
+        </div>
+        <p class="hint hint--box">Доставляем по всей Ингушетии. Стоимость доставки скажет менеджер, когда подтвердит заказ.</p>
+      </div>
+
+      <div id="pickupBox" hidden>
+        <div class="pickup">
+          <p class="pickup__title">Заберите заказ в кафе</p>
+          <p>г. Назрань, ул. Тангиева, 45</p>
+          <a class="link" id="mapLink2" target="_blank" rel="noopener">Как добраться — Яндекс Карты</a>
+        </div>
+      </div>
+
+      <fieldset class="field">
+        <legend class="label">Оплата</legend>
+        <div class="seg">
+          <label><input type="radio" name="pay" value="cash" checked><span>Наличными</span></label>
+          <label><input type="radio" name="pay" value="transfer"><span>Переводом</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field" id="changeBox">
+        <label class="label" for="fChange">С какой суммы нужна сдача? <span class="opt">(необязательно)</span></label>
+        <input class="input" id="fChange" name="change" inputmode="numeric" placeholder="Например, 2000">
+        <p class="err" data-err="change"></p>
+      </div>
+      <p class="hint hint--box" id="transferBox" hidden>Номер для перевода пришлёт менеджер, когда подтвердит заказ.</p>
+
+      <div class="field">
+        <label class="label" for="fComment">Комментарий <span class="opt">(необязательно)</span></label>
+        <textarea class="input input--area" id="fComment" name="comment" rows="2" placeholder="Без лука, аллергия на кунжут, позвонить у ворот…"></textarea>
+      </div>
+
+      <div class="sheet__foot">
+        <div class="total"><span>Блюда</span><b id="coTotal">0 ₽</b></div>
+        <p class="hint" id="coHint">Доставка — по договорённости с менеджером</p>
+        <button class="btn btn--wa" id="orderBtn" type="submit">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
+          <span id="orderBtnText">Заказать</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- 3. Заказ сформирован -->
+    <div class="sheet__body" id="viewDone" hidden>
+      <div class="done">
+        <p class="done__num" id="doneNum">Заказ №</p>
+        <div class="done__warn">
+          <b>Остался один шаг.</b>
+          Нажмите зелёную кнопку — откроется WhatsApp с готовым сообщением. Там нажмите «Отправить».
+        </div>
+        <a class="btn btn--wa" id="waAgain" target="_blank" rel="noopener">Открыть WhatsApp и отправить</a>
+        <button class="btn btn--light" id="sentBtn" type="button">Готово, заказ отправлен</button>
+        <p class="hint">Не получается? Позвоните: <a href="tel:+79137060606">+7 913 706-06-06</a></p>
+      </div>
+    </div>
+
+    <!-- 4. Спасибо -->
+    <div class="sheet__body" id="viewThanks" hidden>
+      <div class="done">
+        <p class="done__big">Спасибо за заказ!</p>
+        <p>Менеджер скоро ответит вам в WhatsApp и подтвердит заказ.</p>
+        <button class="btn" type="button" data-close>Вернуться в меню</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast" hidden>
+    <span id="toastText"></span>
+    <button type="button" id="toastBtn">Вернуть</button>
+  </div>
+
+  <script src="menu.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
